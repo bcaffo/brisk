@@ -1,9 +1,9 @@
 Package: brisk
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: Brain R Image Science Kit 
+Version: 0.0.1
 Date: 2012-06-20
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Brian Caffo
+Maintainer: bcaffo@gmail.com
+Description: A package for using R to analyze brain imaging data
+License: GPL-3
