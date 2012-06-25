@@ -7,4 +7,7 @@ Author: Brian Caffo
 Maintainer: bcaffo@gmail.com
 Description: A package for using R to analyze brain imaging data
 License: GPL-3
-Depends: AnalyzeFMRI, fastICA
+Depends: AnalyzeFMRI
+Suggests: fastICA, fmri, or.nifti, rniftilib, tractor.base, RNiftyReg, mritc
+
+
