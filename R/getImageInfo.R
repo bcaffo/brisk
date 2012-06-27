@@ -1,21 +1,47 @@
 ##a general purpose function for getting image info for creating analytic data structures
-getImageInfo <- function(filename, type = NULL){
-  if (!is.character(filename)) stop("filename is not character, attempting to coerce")
+##returns a very minimal set of information
+##The goal is to get a small set of information for loading and working with data
+##the templateFile is the file that the data is registered to
+##the pipeline is a name of a pipeline just to check later on to make sure all
+##images were processed with the same pipeline
+##
+##Brian Caffo June 2012
+getImageInfo <- function(filename, type = NULL, pipeline = NULL, templateFile = NULL){
+  if (!is.character(filename)) stop("filename is not character")
   if (!file.exists(filename)) stop(paste("File ", filename, " does not exist"))  
-
-  ##unspecified file type, try to get it from the extension
-  if (type = NULL){
-    temp <- strsplit(filename, "/.")[[1]]
-    type <- temp[length(temp)]
+  if (!is.null(pipeline)) if (!is.character(pipeline)) stop("pipeline must be character")
+  if (!is.null(templateFile)){
+    if (!is.character(templateFile)) stop("If specified, templateFile must be a character")
+    if (!file.exists(templateFile)) stop("templateFile does not exist")
   }
-  
+  ##unspecified file type, try to get it from the extension
+  if (is.null(type)){
+    if (length(grep("\\.", basename(filename))) == 0) stop("Unknown file extension")
+    type <- tail(unlist(strsplit(filename, "\\.")), 1)
+  }
   if (type == "nii") {
     info <- f.read.nifti.header(filename)
   }
-  else if (type == ""){
+  else if (type == "hdr"){
     info <- f.read.analyze.header(filename)
-  }  
-
+  }
+  else if (type == "img"){
+    if (length(grep("\\.", basename(filename))) == 0) stop(".img file without extension, don't know where to look for hdr file")
+    hdrFile <- sub("img$", "hdr", filename)
+    info <- f.read.analyze.header(hdrFile)
+  }
+  else stop("Unknown file type")
+  rlist <- list(
+    file = basename(filename),
+    location = getAbsolutePath(dirname(filename)),
+    fileFullPath = getAbsolutePath(filename),
+    dim = info$dim[2 : info$dim[1]],
+    units = info$pixdim[2 : info$dim[1]],
+    pipelineName = pipeline,
+    templateFIle = templateFile
+  )
+  
+  return(rlist)
 }
 
 
