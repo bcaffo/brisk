@@ -30,7 +30,7 @@ getImageInfo <- function(filename, type = NULL, pipeline = NULL, templateFile = 
     hdrFile <- sub("img$", "hdr", filename)
     info <- f.read.analyze.header(hdrFile)
   }
-  else stop("Unknown file type")
+  else stop("Unknown file type, note nii.gz has to be gunzipped")
   rlist <- list(
     file = basename(filename),
     location = getAbsolutePath(dirname(filename)),
