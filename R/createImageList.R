@@ -3,7 +3,6 @@
 ##fileNames <- full paths to files
 ## 
 ## Brian Caffo July 2012
-
 createImageList <- function(fileNames, ids = NULL, ...){
   if (!is.character(fileNames)) stop("fileNames must be character")
   fileCheckStatus <- sapply(fileNames, function(x) file.exists(x))
