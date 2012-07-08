@@ -6,7 +6,7 @@
 ##images were processed with the same pipeline
 ##
 ##Brian Caffo June 2012
-getImageInfo <- function(filename, type = NULL, pipeline = NULL, templateFile = NULL){
+getImageInfo <- function(filename, subjectID = NULL, type = NULL, pipeline = NULL, templateFilename = NULL){
   if (!is.character(filename)) stop("filename is not character")
   if (!file.exists(filename)) stop(paste("File ", filename, " does not exist"))  
   if (!is.null(pipeline)) if (!is.character(pipeline)) stop("pipeline must be character")
@@ -38,7 +38,7 @@ getImageInfo <- function(filename, type = NULL, pipeline = NULL, templateFile = 
     dim = info$dim[2 : info$dim[1]],
     units = info$pixdim[2 : info$dim[1]],
     pipelineName = pipeline,
-    templateFIle = templateFile
+    templateFilename = templateFilename
   )
   
   return(rlist)
