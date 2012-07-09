@@ -13,6 +13,7 @@ getImageInfo <- function(filename, subjectID = NULL, imageID = NULL, type = NULL
   if (!is.null(templateFile)){
     if (!is.character(templateFile)) stop("If specified, templateFile must be a character")
     if (!file.exists(templateFile)) stop("templateFile does not exist")
+    templateFile <- getAbsolutePath(dirname(templateFile))
   }
   ##unspecified file type, try to get it from the extension
   if (is.null(type)){
@@ -41,7 +42,7 @@ getImageInfo <- function(filename, subjectID = NULL, imageID = NULL, type = NULL
     dim = info$dim[2 : info$dim[1]],
     units = info$pixdim[2 : info$dim[1]],
     pipelineName = pipeline,
-    templateFile = getAbsolutePath(dirname(templateFile))
+    templateFile = templateFile
   )
   
   return(rlist)
