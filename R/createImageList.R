@@ -1,7 +1,7 @@
 ##creates a list of images to be loaded into an analytical matrix
 ##
 ##fileNames <- full paths to files
-## 
+##subjectIDs 
 ## Brian Caffo July 2012
 createImageList <- function(fileNames, subjectIDs = NULL, imageIDs = NULL, ...){
   if (!is.character(fileNames)) stop("fileNames must be character")
