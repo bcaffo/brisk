@@ -30,10 +30,7 @@ createImageList <- function(fileNames, subjectIDs = NULL, imageIDs = NULL, ...){
     ##imageIDs have to be unique
     if (anyDuplicated(imageIDs)) stop
     for (i in 1 : length(rval)) rval[[i]]$imageId <- imageIDs[i]  
-  }
-    
-  
-  
+  }  
   return(rval)
 }
 
