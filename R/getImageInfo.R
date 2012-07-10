@@ -6,7 +6,7 @@
 ##images were processed with the same pipeline
 ##
 ##Brian Caffo June 2012
-getImageInfo <- function(filename, subjectID = NULL, imageID = NULL, type = NULL, pipeline = NULL, templateFile = NULL){
+getImageInfo <- function(filename,  imageID = NA, subjectID = NA, type = NULL, pipeline = NULL, templateFile = NULL){
   if (!is.character(filename)) stop("filename is not character")
   if (!file.exists(filename)) stop(paste("File ", filename, " does not exist"))  
   if (!is.null(pipeline)) if (!is.character(pipeline)) stop("pipeline must be character")

@@ -11,7 +11,8 @@
 ##rdaDRI is where saveRDA writes to
 ##keepData is a flag as to whether to keep all of the data
 readSubjectImagingData <- function(imageList, 
-                                   maskFileList = NULL,
+                                   maskFile = NULL,
+                                   maskIMG = NULL,
                                    saveRDA = FALSE,
                                    rdaDIR = NULL,
                                    keepImage = FALSE,
@@ -20,11 +21,15 @@ readSubjectImagingData <- function(imageList,
                                    checkPipeline = FALSE, 
                                    checkTemplate = FALSE){
   
-  if ( keepMaskedImage & is.null(maskFileList) ) stop("Must supply a mask if you want to keep masked data")
+  if (is.null(maskFile) & is.null(maskImg)) stop("one of a mask file or mask image must be retained")
 
-  if ( !keepMaskedImage & !keepImage & !saveRDA) warning("None of keepMaskImage, keepImage or saveRDA are TRUE, no loaded image data will be saved")
+  if ( !keepMaskedImage & !keepImage & !saveRDA ) warning("None of keepMaskImage, keepImage or saveRDA are TRUE, no loaded image data will be saved")
 
   n <- length(imageList)
+  ##check the imageIDs which must be there
+  imageIDs <- sapply(imageList, function(x), x$imageID)
+  ##imageIDs have to be unique
+  if (anyDuplicated(imageIDs)) stop
   
   if (checkPipeline){
     pipelineNames <- sapply(imageList, function(x) x$pipelineName)
@@ -39,36 +44,32 @@ readSubjectImagingData <- function(imageList,
     else if (any(is.null(templateNames))) stop("Some subjects with missing templates")
     else if (length(unique(templateNames)) != 1) stop("Some subjects have different templates")
   }
-
-  ##if you just gave one file, it's assumed that it's the mask for the whole group
-  if (!is.null(maskFileList) & length(maskFileList) == 1) maskFileList <- rep(maskFileList, n)
-    
+  
+  if (!is.character(maskFile)) maskFile <- as.character(maskFile)  
+  if (!file.exists(maskFile)) stop("Mask file doesn't exist")  
+  else {
+    if (length(dim(maskImg)) == 4) maskImg <- maskImg[,,,1]
+    maskImg <- getImage(maskFile)
+    maskImg <- maskImg == 1  
+  }
+  
+  if (!is.array(maskImg)) stop("maskImg must be an array")
+  if (any(!(unique(maskImg) %in% c(TRUE, FALSE)))) stop("maskImg must be Boolean")
+  
+  maskDim <- dim(maskImg)
+  maskVector <- which(maskImg)
+  
   for (i in 1 : n){ 
     if (verbose) print(i)
     
     img <- getImage(imageList[[i]]$fileFullPath)
-    if (keepImage) imageList[[i]]$image <- img
-    
-    if (!is.null(maskFileList)){
-      maskFile <- maskFileList[i]
-      if (!is.null(maskFile) & !is.character(maskFile)) maskFile <- as.character(maskFile)  
-      if (!is.null(maskFile) & !file.exists(maskFile)) {
-        stop("Mask file doesn't exist")  
-      }
-      else{
-        maskImg <- getImage(maskFile)
-        if (length(dim(maskImg)) == 4) maskImg <- maskImg[,,,1]
-      }
-      maskDim <- dim(maskImg)
-      if (dim(img)[1 : length(maskDim)] != maskDim) stop("image and mask dimensions don't match")
-
-      maskImg <- maskImg == 1  
-      maskVector <- which(maskImg)
-      if (length(dim(img)) != 4) stop("function only works for 4D files, though it should read 3D files in as 4D with the final dimension of 1")
+    if (keepImage) imageList[[i]]$image <- img      
+    if (dim(img)[1 : length(maskDim)] != maskDim) stop("image and mask dimensions don't match")
+    if (length(dim(img)) != 4) stop("function only works for 4D files, though it should read 3D files in as 4D with the final dimension of 1")
       
-      ##now get the masked data 
-      imgMatrix <- apply(img, 4, function(x) x[maskVector])
-    }
+    ##now get the masked data 
+    imgMatrix <- apply(img, 4, function(x) x[maskVector])
+    
   }   
 }
 
