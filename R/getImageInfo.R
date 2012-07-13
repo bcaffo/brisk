@@ -6,7 +6,7 @@
 ##images were processed with the same pipeline
 ##
 ##Brian Caffo June 2012
-getImageInfo <- function(filename,  imageID = NA, subjectID = NA, type = NULL, pipeline = NULL, templateFile = NULL){
+getImageInfo <- function(filename,  imageID = NA, type = NULL, pipeline = NULL, templateFile = NULL){
   if (!is.character(filename)) stop("filename is not character")
   if (!file.exists(filename)) stop(paste("File ", filename, " does not exist"))  
   if (!is.null(pipeline)) if (!is.character(pipeline)) stop("pipeline must be character")
@@ -34,13 +34,12 @@ getImageInfo <- function(filename,  imageID = NA, subjectID = NA, type = NULL, p
   else if (type == "gz") stop("right now nii.gz has to be gunzipped first. working on that.")
   else stop("Unknown file type")
   rlist <- list(
-    subjectID = subjectID,
     imageID = imageID, 
     file = basename(filename),
     location = getAbsolutePath(dirname(filename)),
     fileFullPath = getAbsolutePath(filename),
-    dim = info$dim[2 : info$dim[1]],
-    units = info$pixdim[2 : info$dim[1]],
+    dim = info$dim[2 : (info$dim[1] + 1)],
+    units = info$pixdim[2 : (info$dim[1] + 1)],
     pipelineName = pipeline,
     templateFile = templateFile
   )
