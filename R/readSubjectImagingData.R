@@ -6,31 +6,29 @@
 
 ##maskFile characters pointing to mask file.
 
-##saveRDA is a flag as to whether to write out a directory of rda files, one per subject
-##rdaDRI is where saveRDA writes to
+##rdaDRI is where the rda is written to
 ##keepData is a flag as to whether to keep all of the data
 readSubjectImagingData <- function(imageList, 
+                                   rdaDIR,
                                    maskFile = NULL,
-                                   saveRDA = FALSE,
-                                   rdaDIR = NULL,
-                                   keepImage = FALSE,
+                                   keepImage = TRUE,
                                    keepMaskedImage = TRUE,
                                    verbose = TRUE,
-                                   checkStuff = TRUE){
+                                   checkStuff = TRUE,
+                                   overwrite = FALSE){
   
   if (is.null(maskFile) & !keepMaskedImage) stop("A mask file must be given if keepMaskedImage is true")
 
-  if ( !keepMaskedImage & !keepImage & !saveRDA ) stop("None of keepMaskImage, keepImage or saveRDA are TRUE, no loaded image data will be saved")
+  if ( !keepMaskedImage & !keepImage ) stop("None of keepMaskImage, keepImage are TRUE, no loaded image data will be saved")
 
-  if (saveRDA){
-    if (is.null(rdaDIR)) stop("rdaDir must be specified if saveRDA is TRUE")
-    if (!file.exists(rdaDIR)) { 
-      warning("Making rdaDIR")
-      dir.create(path = rdaDIR)
-    }
-    else if (length(list.files(rdaDIR)) > 0) warning("existing files in rdaDIR")
-    
+  if (is.null(rdaDIR)) stop("rdaDir must be specified")
+  if (!file.exists(rdaDIR)) { 
+    if (verbose) print("Making rdaDIR")
+    dir.create(path = rdaDIR)
   }
+  else if (length(list.files(rdaDIR)) > 0 & verbose) print("Existing files in rdaDIR")
+    
+  
   n <- length(imageList)
   
   ##check the imageIDs which must be there
@@ -41,7 +39,7 @@ readSubjectImagingData <- function(imageList,
   if (checkStuff){
     pipelineNames <- sapply(imageList, function(x) x$pipelineName)
     if (is.null(pipelineNames)) warning("Checking pipeline and no subjects have named pipelines")
-    else if (length(unique(pipelineNames)) != 1) warning("Some subjects have different pipelineNames")
+    else if (length(unique(pipelineNames)) != 1) warning("Some subjects have different pipelineNames")
     templateNames <- sapply(imageList, function(x) x$templateFilename)
     if (is.null(templateNames)) warning("Checking template and no subjects have template file names")
     else if (length(unique(templateNames)) != 1) warning("Some subjects have different templates")
@@ -57,35 +55,41 @@ readSubjectImagingData <- function(imageList,
     if (length(maskDim) != 3) stop("Mask must be a 3D image")
     maskVector <- which(maskImg)
   }
-  
-  #if (!is.array(maskImg)) stop("maskImg must be an array")
-  #if (any(!(unique(maskImg) %in% c(TRUE, FALSE)))) stop("maskImg must be Boolean")
-  
+    
   
   for (i in 1 : n){ 
     if (verbose) print(i)
     
     img <- getImage(imageList[[i]]$fileFullPath)  
     
-    if (keepImage & !saveRDA) imageList[[i]]$image <- img      
     if (all(dim(img)[1 : 3] != maskDim)) stop("image and mask dimensions don't match")
       
     ##now get the masked data 
     imgMatrix <- t(apply(img, 4, function(x) x[maskVector]))
     
-    if (keepMaskedImage & !saveRDA) imageList[[i]]$maskedImage <- imgMatrix
-
-    if (saveRDA){
-      subjDIR <- paste(rdaDIR, "/", imageList[[i]]$imageID, "/", sep = "")
-      dir.create(subjDIR)
-      if (keepImage) save(img, maskVector, file = paste(subjDIR, "image,rda", compress = TRUE, sep = ""))
-      if (keepMaskedImage) save(imgMatrix, maskVector, file = paste(subjDIR, "maskImage.rda", sep = "/"), compress = TRUE)
+    subjDIR <- paste(rdaDIR, "/", imageList[[i]]$imageID, "/", sep = "")
+    if (!file.exists(subjDIR)) dir.create(subjDIR)
+    
+    if (keepImage) {
+      imageLoc <- paste(subjDIR, "image.rda", sep = "")
+      if (file.exists(imageLoc) & !overwrite) stop("Image file already exists and overwrite is FALSE")
+      else save(img, maskVector, file = imageLoc, compress = TRUE)
+    }
+    if (keepMaskedImage) {
+      maskedImageLoc <- paste(subjDIR, "maskImage.rda", sep = "/")
+      if (file.exists(maskedImageLoc) & !overwrite) stop("Masked image file already exists and overwrite is FALSE")
+      else save(imgMatrix, maskVector, file = maskedImageLoc, compress = TRUE)
     }
     
   } 
-  if (saveRDA){
-    save(imageList, file = paste(subjDIR, "/imageListHeader.rda",sep = ""))
-  }
+  metaInfoLoc <- paste(rdaDIR, "/imageList.rda", sep = "")
+
+  attributes(imageList)$rdaDIR <- rdaDIR
+  attributes(imageList)$keepImage <- keepImage
+  attributes(imageList)$keepMaskedImage <- keepMaskedImage
+  
+  save(imageList, file = metaInfoLoc)
+
   return(imageList)
 }
 
