@@ -1,4 +1,5 @@
-##takes the output of the createImageList and creates an object with the template and the mask(s)
+##takes the output of the createImageList and creates an object with
+##the template and the mask(s)
 ##for 3D data saves a vector and for 4D data saves a matrix
 ##Brian Caffo July 2012
 ##note right now it only supports the mask being a 0,1 image or vector of 0,1 images#
@@ -6,12 +7,13 @@
 
 ##maskFile characters pointing to mask file.
 
-##rdaDRI is where the rda is written to
-##keepData is a flag as to whether to keep all of the data
+##rdaDIR is where the rda is written to
+##keepImage creates a copy of the image as an RDA file
+
 readSubjectImagingData <- function(imageList, 
                                    rdaDIR,
                                    maskFile = NULL,
-                                   keepImage = TRUE,
+                                   keepImage = FALSE,
                                    verbose = TRUE,
                                    overwrite = FALSE){
   if (is.null(rdaDIR)) stop("rdaDir must be specified")
@@ -19,8 +21,9 @@ readSubjectImagingData <- function(imageList,
     if (verbose) print("Making rdaDIR")
     dir.create(path = rdaDIR)
   }
-  else if (length(list.files(rdaDIR)) > 0 & verbose) print("Existing files in rdaDIR")
-    
+  else if (length(list.files(rdaDIR)) > 0 & verbose) {
+    print("Existing files in rdaDIR")
+  }    
 
   n <- length(imageList)
 
@@ -51,12 +54,22 @@ readSubjectImagingData <- function(imageList,
     
     if (all(dim(img)[1 : 3] != maskDim))
       stop("image and mask dimensions don't match")
-      
-    ##now get the masked data 
-    imgMatrix <- t(apply(img, 4, function(x) x[maskVector]))
+
+    
+    ##now get the masked data
+    if (length(dim(img)) == 4){
+      imgMatrix <- t(apply(img, 4, function(x) x[maskVector]))
+    }
+    else if (length(dim(img)) == 3){
+      imgMatrix <- as.vector(img[maskVector])
+    }
+    else stop("Masking only implemented for 3D and 4D images")
+    
     
     subjDIR <- paste(rdaDIR, "/", imageList[[i]]$imageID, "/", sep = "")
     if (!file.exists(subjDIR)) dir.create(subjDIR)
+    
+    imageList[[i]]$subjDIR <- getAbsolutePath(subjDIR)
     
     if (keepImage) {
       imageLoc <- paste(subjDIR, "image.rda", sep = "")
@@ -67,7 +80,9 @@ readSubjectImagingData <- function(imageList,
     }
     if (!is.null(maskFile)) {
       maskedImageLoc <- paste(subjDIR, "maskImage.rda", sep = "/")
-      if (file.exists(maskedImageLoc) & !overwrite) stop("Masked image file already exists and overwrite is FALSE")
+      if (file.exists(maskedImageLoc) & !overwrite) {
+        stop("Masked image file already exists and overwrite is FALSE")
+      }
       else save(imgMatrix, maskVector, file = maskedImageLoc, compress = TRUE)
       imageList[[i]]$maskFile <- maskFile
       imageList[[i]]$maskLength <- length(maskVector)
@@ -75,11 +90,12 @@ readSubjectImagingData <- function(imageList,
     }
     
   } 
-  metaInfoLoc <- paste(rdaDIR, "/imageList.rda", sep = "")
+  imageListFile <- paste(rdaDIR, "/imageList.rda", sep = "")
 
   attributes(imageList)$rdaDIR <- rdaDIR
+  attributes(imageList)$imageListFile <- imageListFile
   
-  save(imageList, file = metaInfoLoc)
+  save(imageList, file = imageListFile)
 
   return(imageList)
 }

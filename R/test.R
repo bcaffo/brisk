@@ -25,4 +25,5 @@ test <- attachSubjectInfo(list(1 : 2, 1 : 10), test, "paradigm")
 
 test3 <- readSubjectImagingData(test,
                                 maskFile ="../data/mask.nii",
-                                rdaDIR = "temp")
+                                rdaDIR = "temp",
+                                overwrite = TRUE)

@@ -17,6 +17,8 @@ createImageList <- function(fileNames, imageIDs, ...){
   for (i in 1 : length(rval)) rval[[i]]$imageID<- imageIDs[i]  
 
   attributes(rval)$imageIDs <- imageIDs
+  class(rval) <- "brisk"
+  
   return(rval)
 }
 
