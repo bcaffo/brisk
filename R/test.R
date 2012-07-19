@@ -6,6 +6,7 @@ source("createImageList.R")
 source("readSubjectImagingData.R")
 source("getImage.R")
 source("addCovariateData.R")
+source("attachSubjectInfo.R")
 
 getImageInfo("getImageInfo.R")
 getImageInfo("../data/1.nii")
@@ -20,6 +21,7 @@ covDat <- data.frame( imageIDs = c("subject1", "subject2"), age = c(10, 20))
 
 
 test <- addCovariateData(covDat, test)
+test <- attachSubjectInfo(list(1 : 2, 1 : 10), test, "paradigm")
 
 test3 <- readSubjectImagingData(test,
                                 maskFile ="../data/mask.nii",
