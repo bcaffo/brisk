@@ -16,6 +16,7 @@ createImageList <- function(fileNames, imageIDs, ...){
   if (anyDuplicated(imageIDs)) stop
   for (i in 1 : length(rval)) rval[[i]]$imageID<- imageIDs[i]  
 
+  attributes(rval)$imageIDs <- imageIDs
   return(rval)
 }
 
