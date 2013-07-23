@@ -3,13 +3,20 @@
 ##a data matrix where the column and row orders correspond to roiNames
 ##bend is how much the lines bend toward the origin (between 0 and 1)
 ##if this isn't the case, 
-graphVis <- function(graph, cutoff, roiNames, expansion = 1.2, bend = .5, lwd = 2, col = "black"){
+graphVis <- function(graph, 
+                     roiNames, 
+                     cutoff = NULL, 
+                     expansion = 1.2, 
+                     bend = .5, 
+                     lwd = 2, 
+                     col = "black"){
     if (is.matrix(graph)) graph <- graph[upper.tri(graph)]  
-    
+    if (!is.null(cutoff)) graph <- (graph < cutoff) * 1
+     
     roiCount <- length(roiNames)
     idxs <- expand.grid(1 : roiCount, 1 : roiCount)
     idxs <- idxs[idxs[,1] < idxs[,2],]
-    nonzero <- (1 : choose(roiCount, 2))[graph < cutoff]
+    nonzero <- (1 : choose(roiCount, 2))[graph == 1]
     
     ##create the graph of labels
     ##angle values in radians

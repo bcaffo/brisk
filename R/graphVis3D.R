@@ -4,7 +4,7 @@
 ##a data matrix where the column and row orders correspond to roiNames
 ##bend is how much the lines bend toward the origin (between 0 and 1)
 ##if it's input as a matrix, then it does this automatically
-graphVis3D <- function(graph, roiNames, expansion = 1.2, bend = .5, lwd = 2, col = "black", cutoff = NULL){
+graphVis3D <- function(graph, roiNames, cutoff = NULL, expansion = 1.2, bend = .5, lwd = 2, col = "black"){
     if (is.matrix(graph)) graph <- graph[upper.tri(graph)]  
     if (!is.null(cutoff)) graph <- (graph < cutoff) * 1
      
