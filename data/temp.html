@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!-- Based on Scott Murray's code from the book Interactive Data Visualization for the Web --> 
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>D3: Force layout</title>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+
+var dataset = { 
+ nodes: [ 
+ { name: "MFG_L" }, 
+ { name: "MFG_R" }, 
+ { name: "MFG_DPFC_L" }, 
+ { name: "MFG_DPFC_R" }, 
+ { name: "IFG_opercularis_L" }, 
+ { name: "IFG_opercularis_R" }, 
+ { name: "IFG_orbitalis_L" }, 
+ { name: "IFG_orbitalis_R" }, 
+ { name: "IFG_triangularis_L" }, 
+ { name: "IFG_triangularis_R" }, 
+ { name: "SMG_L" }, 
+ { name: "SMG_R" }, 
+ { name: "AG_L" }, 
+ { name: "AG_R" }, 
+ { name: "STG_L" }, 
+ { name: "STG_R" }, 
+ { name: "STG_L_pole" }, 
+ { name: "STG_R_pole" }, 
+ { name: "MTG_L" }, 
+ { name: "MTG_R" }, 
+ { name: "MTG_L_pole" }, 
+ { name: "MTG_R_pole" }, 
+ { name: "ITG_L" }, 
+ { name: "ITG_R" }, 
+ { name: "FuG_L" }, 
+ { name: "FuG_R" }, 
+ { name: "Ins_L" }, 
+ { name: "Ins_R" }, 
+ { name: "Hippo_L" }, 
+ { name: "Hippo_R" }, 
+ { name: "PIns_L" }, 
+ { name: "PIns_R" }, 
+ { name: "PSTG_L" }, 
+ { name: "PSTG_R" }, 
+ { name: "PMTG_L" }, 
+ { name: "PMTG_R" }, 
+ { name: "PITG_L" }, 
+ { name: "PITG_R" }
+ ],
+ edges: [ { source: 6, target: 11 }, 
+ { source: 8, target: 11 }, 
+ { source: 6, target: 18 }, 
+ { source: 7, target: 18 }, 
+ { source: 5, target: 20 }, 
+ { source: 12, target: 20 }, 
+ { source: 18, target: 20 }, 
+ { source: 18, target: 21 }, 
+ { source: 1, target: 22 }, 
+ { source: 9, target: 22 }, 
+ { source: 12, target: 22 }, 
+ { source: 13, target: 22 }, 
+ { source: 21, target: 22 }, 
+ { source: 20, target: 27 }, 
+ { source: 12, target: 29 }, 
+ { source: 13, target: 29 }, 
+ { source: 28, target: 29 }, 
+ { source: 3, target: 31 }, 
+ { source: 10, target: 31 }, 
+ { source: 1, target: 32 }, 
+ { source: 21, target: 34 }, 
+ { source: 6, target: 36 }, 
+ { source: 6, target: 11 }, 
+ { source: 8, target: 11 }, 
+ { source: 6, target: 18 }, 
+ { source: 7, target: 18 }, 
+ { source: 5, target: 20 }, 
+ { source: 12, target: 20 }, 
+ { source: 18, target: 20 }, 
+ { source: 18, target: 21 }, 
+ { source: 1, target: 22 }, 
+ { source: 9, target: 22 }, 
+ { source: 12, target: 22 }, 
+ { source: 13, target: 22 }, 
+ { source: 21, target: 22 }, 
+ { source: 20, target: 27 }, 
+ { source: 12, target: 29 }, 
+ { source: 13, target: 29 }
+ ]
+}; 
+
+//Initialize a default force layout, using the nodes and edges in dataset
+var force = d3.layout.force()
+.nodes(dataset.nodes)
+.links(dataset.edges)
+.size([w, h])
+.linkDistance([50])
+.charge([-100])
+.start();
+
+var colors = d3.scale.category10();
+
+//Create SVG element
+var svg = d3.select("body")
+.append("svg")
+.attr("width", w)
+.attr("height", h);
+
+//Create edges as lines
+var edges = svg.selectAll("line")
+.data(dataset.edges)
+.enter()
+.append("line")
+.style("stroke", "#ccc")
+.style("stroke-width", 1);
+
+//Create nodes as circles
+var nodes = svg.selectAll("circle")
+.data(dataset.nodes)
+.enter()
+.append("circle")
+.attr("r", 10)
+.style("fill", function(d, i) {
+return colors(i);
+})
+.call(force.drag);
+
+//Every time the simulation "ticks", this will be called
+force.on("tick", function() {
+
+edges.attr("x1", function(d) { return d.source.x; })
+.attr("y1", function(d) { return d.source.y; })
+.attr("x2", function(d) { return d.target.x; })
+.attr("y2", function(d) { return d.target.y; });
+
+nodes.attr("cx", function(d) { return d.x; })
+.attr("cy", function(d) { return d.y; });
+});
+
+</script>
+</body>
+</html>

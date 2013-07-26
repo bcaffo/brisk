@@ -1,6 +1,5 @@
 
 ##working resource locations, remove after creating package
-library(rjson)
 preamble <- paste(scan('~/sandboxes/brisk/data/preamble.html', what = character(), sep = '\n'), "\n")
 postamble <- paste(scan('~/sandboxes/brisk/data/postamble.html', what = character(), sep = '\n'), "\n")
 d3ForceGraphGuts <- paste(scan('~/sandboxes/brisk/data/d3ForceGraphGuts.html', what = character(), sep = '\n'), '\n')
@@ -19,28 +18,6 @@ d3ForceGraph <- function(graph,
     idxs <- expand.grid(1 : roiCount, 1 : roiCount)
     idxs <- idxs[idxs[,1] < idxs[,2],]
     nonzero <- (1 : choose(roiCount, 2))[graph == 1]
-    x <- seq(0, roiCount - 1)
-    y <- seq(0, roiCount - 1)
-    
-    out1 <- cat()
-       
-    roiCount <- length(roiNames)
-    idxs <- expand.grid(1 : roiCount, 1 : roiCount)
-    idxs <- idxs[idxs[,1] < idxs[,2],]
-    nonzero <- (1 : choose(roiCount, 2))[graph == 1]
-    
-    cat(toJSON(
-        list(
-            nodes = apply(roiNames, function(x) list(name = x)), 
-            edges =  apply(idxs[nonzero,], 1, 
-                function(x) {
-                    temp <- list(source = x[1], target = x[2])
-                    names(temp) <- NULL
-                }            
-           ) 
-        )
-       )
-    )
     
     nodes <- sapply(roiNames, function(r) paste('{ name: "', r, '" }', sep = ""))
     
@@ -70,9 +47,6 @@ d3ForceGraph <- function(graph,
         d3ForceGraphGuts,
         postamble,
         file = filename)
-    
-    
-    
  }
 
 
