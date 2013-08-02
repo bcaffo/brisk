@@ -1,0 +1,13 @@
+Package: brisk
+Type: Package
+Title: rsfmriGraph
+Version: 0.0.1
+Date: 2012-06-20
+Author: Brian Caffo
+Maintainer: bcaffo@gmail.com
+Description: A subpackage of BRISK for analyzing resting state fMRI graphs
+License: GPL-3
+Depends: AnalyzeFMRI, R.utils
+Suggests: fastICA, fmri, or.nifti, rniftilib, tractor.base, RNiftyReg, mritc
+
+

@@ -1,11 +1,11 @@
 Package: brisk
 Type: Package
-Title: Brain R Image Science Kit 
+Title: fmriTools
 Version: 0.0.1
 Date: 2012-06-20
 Author: Brian Caffo
 Maintainer: bcaffo@gmail.com
-Description: A package for using R to analyze brain imaging data
+Description: A package for using R to analyze fMRI brain imaging data; part of the BRISK toolset
 License: GPL-3
 Depends: AnalyzeFMRI, R.utils
 Suggests: fastICA, fmri, or.nifti, rniftilib, tractor.base, RNiftyReg, mritc
