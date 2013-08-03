@@ -1,5 +1,11 @@
 ##reads a collection of csv files and puts them into a list of either correlations or covariances
-corCreate <- function(fileList, path = "./", loadFunction = read.csv, what = "cor", asMatrix = TRUE, columns = NULL, columnNames = NULL, ...){
+corCreate <- function(fileList, path = "./", 
+                      loadFunction = read.csv, 
+                      transpose = FALSE,
+                      what = "cor", 
+                      asMatrix = TRUE, 
+                      columns = NULL, 
+                      columnNames = NULL, ...){
     ##the fileList with the paths appended
     filesFullPath <- paste(path, "/", fileList, sep = "")
     
@@ -8,6 +14,8 @@ corCreate <- function(fileList, path = "./", loadFunction = read.csv, what = "co
     
     ##read in the data
     dat <- lapply(filesFullPath, function(filename) loadFunction(filename, ...)) 
+    
+    if (transpose) dat <- lapply(dat, t)
     
     ##check to make sure everything has the same number of columns
     cols <- sapply(dat, ncol)
