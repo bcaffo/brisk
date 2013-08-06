@@ -1,8 +1,8 @@
 
 ##working resource locations, remove after creating package
-preamble <- paste(scan('~/sandboxes/brisk/data/preamble.html', what = character(), sep = '\n'), "\n")
-postamble <- paste(scan('~/sandboxes/brisk/data/postamble.html', what = character(), sep = '\n'), "\n")
-d3ForceGraphGuts <- paste(scan('~/sandboxes/brisk/data/d3ForceGraphGuts.html', what = character(), sep = '\n'), '\n')
+preamble <- paste(scan('~/sandboxes/brisk/rsfmriGraph/data/preamble.html', what = character(), sep = '\n'), "\n")
+postamble <- paste(scan('~/sandboxes/brisk/rsfmriGraph/data/postamble.html', what = character(), sep = '\n'), "\n")
+d3ForceGraphGuts <- paste(scan('~/sandboxes/brisk/rsfmriGraph/data/d3ForceGraphGuts.html', what = character(), sep = '\n'), '\n')
 
 d3ForceGraph <- function(graph, 
                          roiNames, 

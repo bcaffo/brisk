@@ -13,6 +13,7 @@ vec2cor <- function(vec, n){ rval <- diag(rep(1, n)); rval[upper.tri(rval)] <- v
 ##temp <- controls[[1]]
 ##max(abs(temp - vec2cov(cov2vec(temp), roiCount)))
 
+
 ##given index value returns array coordinates for a 3d array
 ind2sub <- function(dims, indexVal){
   I <- dims[1]

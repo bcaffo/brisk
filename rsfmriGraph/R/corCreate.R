@@ -2,10 +2,13 @@
 corCreate <- function(fileList, path = "./", 
                       loadFunction = read.csv, 
                       transpose = FALSE,
-                      what = "cor", 
+                      what = cor, 
                       asMatrix = TRUE, 
                       columns = NULL, 
-                      columnNames = NULL, ...){
+                      columnNames = NULL,
+                      cores = 1, 
+                      ...){
+
     ##the fileList with the paths appended
     filesFullPath <- paste(path, "/", fileList, sep = "")
     
@@ -38,12 +41,19 @@ corCreate <- function(fileList, path = "./",
         }
         dat <- lapply(dat, function(datEl) {colnames(datEl) <- columnNames; datEl})
     }
-
-    if (what == "cor") out <- lapply(dat, cor)
-    else if (what == "cov") out <- lapply(dat, cov)
-    else stop(paste("what = ", what, " is not suppported"))
+    
+    if (cores > 1) {
+        cl <- makeCluster(getOption("cl.cores", cores))
+        out <- parLapply(cl, dat, what)
+    }
+    else if (cores == 1) {
+        out <- lapply(dat, what)
+    }
     names(out) <- fileList    
     
     if (asMatrix) out <- t(sapply(out, cor2vec))
+    
+    if (cores > 1) stopCluster(cl)
+    
     return(out)
 }
