@@ -12,9 +12,9 @@ groupMatrixPermutationTest <- function(group1MatrixData, group2MatrixData,
     ##if paired, they have to have the same number of subjects in the same order
     if (paired) stopifnot(nrow(group1MatrixData) == nrow(group2MatrixData))
 
-    v <- ncol(group1Matrix)
-    n <- nrow(group1Matrix)
-    m <- nrow(group2Matrix)
+    v <- ncol(group1MatrixData)
+    n <- nrow(group1MatrixData)
+    m <- nrow(group2MatrixData)
 
     ##the observed statistics value
     observedStat <- sapply(1 : ncol(group1MatrixData),
@@ -29,15 +29,15 @@ groupMatrixPermutationTest <- function(group1MatrixData, group2MatrixData,
     ##permutations are generated at first
     if (paired){
         ##each column is an indicator of whether that pair should switch groups
-        permIDs <- matrix(sample(c(1, 0), size = n * permutations, replace = TRUE), n, permutations)
+        permIDXs <- matrix(sample(c(1, 0), size = n * permutations, replace = TRUE), n, permutations)
     }
     else {
         ##each column is a reshuffling of the subject IDs
-        permIDs <- sapply(1 : permutations, function(x) sample(1 : (m + n)))
+        permIDXs <- sapply(1 : permutations, function(x) sample(1 : (m + n)))
     }
         
     ##a parallel function
-    myApply <- function(cl, cores, X, FUN){
+    myApply <- function(X, FUN){
         if (cores > 1){
             parApply(cl, X, 2, FUN)
         }
@@ -47,12 +47,12 @@ groupMatrixPermutationTest <- function(group1MatrixData, group2MatrixData,
     }
 
     if (cores == 1) cl <- NULL
-    else makeCluster(getOption("cl.cores", cores))
+    else cl <-makeCluster(getOption("cl.cores", cores))
 
-    permutationDistribution <- myApply(permID, 
-        ##for each permutation take the maximum statistic value
-        max(
-            function(perm){
+    permutationDistribution <- myApply(permIDXs, 
+        function(perm){
+            ##for each permutation take the maximum statistic value
+            max(
                 ##loop over all v
                 sapply(1 : v, 
                     function(i) {
@@ -70,9 +70,14 @@ groupMatrixPermutationTest <- function(group1MatrixData, group2MatrixData,
                         return(stat(x, y))
                     }
                 )
-            }
-        )
+            )
+        }
     )
+    if (cores > 1) stopCluster(cl)
 
+    out <- list(pvalues = sapply(observedStat, function(x) mean(x > permutationDistribution)),
+                observedStat = observedStat,
+                permutationDistribution = permutationDistribution)
+    
     return(out)
 }

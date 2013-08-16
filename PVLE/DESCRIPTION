@@ -1,0 +1,16 @@
+Package: PVLE
+Version: 0.1.0
+Date: 2013-08-14
+Title: Parallel Voxel Level Everything
+Description: Parallel voxel-level analysis for neuro-images
+Suggests: stats
+Author: Xiaoqiang Xu <cppexp@gmail.com>, Brian Caffo <bcaffo@gmail.com>
+Maintainer: Brian Caffo <bcaffo@gmail.com>
+Depends: R (>= 3.0.1), methods, fmri, tools, Matrix, gdata, stringr,
+        parallel, AnalyzeFMRI
+License: GPL-3
+URL: http://www.bcaffo.com
+Packaged: 2013-04-14 11:58:52 UTC; bcaffo
+Repository: github
+Collate: 'PVLE.R'
+Built: R 3.0.1; ; 2013-08-16 03:33:41 UTC; windows
