@@ -1,7 +1,7 @@
 TODO list for BRISK
 =====
 
-From Haris
+Ideas from collaborators
 ---
 1. ICA group comparisons
 2. Time series extraction from images
