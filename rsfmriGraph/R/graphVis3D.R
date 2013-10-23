@@ -43,5 +43,7 @@ graphVis3D <- function(graph, roiNames, cutoff = NULL, expansion = 1.2, bend = .
                 lwd = lwd)               
     }
     spheres3d(x = x, y = y, z = 0, radius = .025, color = "blue", add = TRUE)
+    ##rotate it (easier than fixing the code to get the rotation I want)
+    par3d(userMatrix = rotationMatrix(pi/2, 0,0,1))
     
 }

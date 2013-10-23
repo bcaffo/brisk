@@ -1,5 +1,6 @@
 ##performs permutation tests for paired and groupd data in the form of a matrix
 ##groups must be aligned by columns. Multiplicity accounted for by taking the max
+##larger values of the statistic points to the alternative
 groupMatrixPermutationTest <- function(group1MatrixData, group2MatrixData, 
                             paired = FALSE, 
                             cores = 1, 
@@ -75,7 +76,7 @@ groupMatrixPermutationTest <- function(group1MatrixData, group2MatrixData,
     )
     if (cores > 1) stopCluster(cl)
 
-    out <- list(pvalues = sapply(observedStat, function(x) mean(x > permutationDistribution)),
+    out <- list(pvalues = sapply(observedStat, function(x) mean(permutationDistribution > x)),
                 observedStat = observedStat,
                 permutationDistribution = permutationDistribution)
     
