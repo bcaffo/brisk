@@ -17,6 +17,6 @@ d3Heatmap <- function(mat,
         edges,
         ']\n}; \n',
         d3ForceGraphGuts,
-        postamble
+        postamble)
     
 }
