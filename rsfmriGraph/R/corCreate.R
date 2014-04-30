@@ -1,4 +1,27 @@
-##reads a collection of csv files and puts them into a list of either correlations or covariances
+#' @title corCreate loops over a collection of csv files and creates correlations
+#' 
+#' @description Reads a collection of csv files and puts them into a list of either 
+#' correlations or covariances
+#' 
+#' @details
+#'
+#' 
+#' @author Brian Caffo
+#' @param filelist chararcter list of csv files
+#' @param loadFunction the function used to load in the files (defaults to read.csv)
+#' @param transpose whether or not to transpose the date before creating the correlations
+#' @param what function that is used to create matrix, obvious candidates are \code{\link{cor}} \code{{link(cov)}}
+#' @param asMatrix each correlation run through cor2vec and stacked up as a matrix? Otheriwse dump everything into a list
+#' @param columns use only specific columns of the csv files
+#' @param columnNames character vectror of names 
+#' @param cores parallelize the computation, only needed if \code{what} is something computationally intensive, otherwise it will slow things down
+#' @export
+#' @keywords
+#' @seealso cor2vec
+#' @return returns a matrix or list of output from what
+#' @aliases
+#' 
+
 corCreate <- function(fileList, path = "./", 
                       loadFunction = read.csv, 
                       transpose = FALSE,
