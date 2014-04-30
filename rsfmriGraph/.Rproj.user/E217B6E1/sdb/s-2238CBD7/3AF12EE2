@@ -1,0 +1,16 @@
+{
+    "contents" : "#' @title Graph Vis\n#' \n#' @description This is a sort of low brow graph visulation function that \n#' plots on a circle\n#' \n#' @details function creates a graph based on roinames for graph < cutoff\n#' assumes that the values are put is as matrix[upper.tri[matrix]] of \n#' a data matrix where the column and row orders correspond to roiNames\n#' bend is how much the lines bend toward the origin (between 0 and 1)\n#' if this isn't the case\n#' \n#' @param graph the graph either sent as a matrix or a vector\n#' @param roiNames a character vector of roiNames\n#' @param expansion how far the label names are from the nodes\n#' @param bend how bendy the lines connecting nodes are\n#' @param lwd line width\n#' @param col node and line color\n\ngraphVis <- function(graph, \n                     roiNames, \n                     cutoff = NULL, \n                     expansion = 1.2, \n                     bend = .5, \n                     lwd = 2, \n                     col = \"black\"){\n    if (is.matrix(graph)) graph <- cor2vec(graph)  \n    if (!is.null(cutoff)) graph <- (graph < cutoff) * 1\n     \n    roiCount <- length(roiNames)\n    idxs <- expand.grid(1 : roiCount, 1 : roiCount)\n    idxs <- idxs[idxs[,1] < idxs[,2],]\n    nonzero <- (1 : choose(roiCount, 2))[graph == 1]\n    \n    ##create the graph of labels\n    ##angle values in radians\n    angles <- seq(0, 2 * pi, length = roiCount + 1)[-1]\n    x <- cos(angles)\n    y <- sin(angles)\n    \n    plot(c(-1, 1) * expansion, c(-1, 1) * expansion, type = \"n\", axes = FALSE, xlab = \"\", ylab = \"\")\n    for (i in 1 : length(x)){\n        text(x[i] * expansion, y[i] * expansion, labels = roiNames[i], cex = .75, srt = angles[i] * 180 / pi)\n    }\n    \n    ##connect points with lines\n    for (i in 1 : length(nonzero)){\n        p <- unlist(idxs[nonzero[i],])\n        p0 <- c(x[p[1]], y[p[1]])\n        p1 <- c(x[p[2]], y[p[2]])\n        p2 <- bend * c(0, 0) + (1 - bend) * (.5 * p0 + .5 * p1)\n        \n        xvals <- c(p0[1], p1[1], p2[1])\n        yvals <- c(p0[2], p1[2], p2[2])\n        \n        tvals <- c(0, 1, .5)\n        t <- seq(0, 1, length = 1000)\n        lines(predict(lm(xvals ~ tvals + I(tvals ^ 2)), newdata = data.frame(tvals = t)), \n              predict(lm(yvals ~ tvals + I(tvals ^ 2)), newdata = data.frame(tvals = t)),\n              col = col,\n              lwd = lwd)\n    }\n    points(x, y, pch = 21, col = \"black\", bg = \"lightblue\")\n    \n}\n",
+    "created" : 1398882073608.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4045169532",
+    "id" : "3AF12EE2",
+    "lastKnownWriteTime" : 1398882405,
+    "path" : "~/GitHub/brisk/rsfmriGraph/R/graphVis.R",
+    "project_path" : "R/graphVis.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

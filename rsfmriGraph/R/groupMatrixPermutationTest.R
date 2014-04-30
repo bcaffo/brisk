@@ -1,6 +1,21 @@
-##performs permutation tests for paired and groupd data in the form of a matrix
-##groups must be aligned by columns. Multiplicity accounted for by taking the max
-##larger values of the statistic points to the alternative
+#' @title Group Matrix Permutation Test
+#' 
+#' @author Brian Caffo
+#' 
+#' @description Performs permutation tests for paired and groupd data in the form of a matrix
+#' groups must be aligned by columns. Multiplicity accounted for by taking the max
+#' larger values of the statistic points to the alternative. Parallelization is available
+#' by setting cores > 1
+#' @details The matrix has to be structured as features along the columns and subjects 
+#' along the rows
+#' 
+#' @param paired whether the observations are paired or not. If so, then the 
+#' group data matrices have to be the same size
+#' @param cores the number of compute cores to be used (note this may not be faster)
+#' @param permutations the number of permutations
+#' @param stat the statistic (of the form \code{f(x, y)}) that returns the statistic  
+#' 
+
 groupMatrixPermutationTest <- function(group1MatrixData, group2MatrixData, 
                             paired = FALSE, 
                             cores = 1, 

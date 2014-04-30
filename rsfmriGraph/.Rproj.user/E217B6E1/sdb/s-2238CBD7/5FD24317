@@ -1,0 +1,16 @@
+{
+    "contents" : "#' @title Template Brain Graph visualization\n#' \n#' @author Brian Caffo\n#' \n#' @description function to plot a graph on a template brain\n#' roiNumbers should be in unique(roiImage) are the integer image values to draw the\n#' graph at. roiNumbers should be the same length as pvalues.\n\n\ntemplateBrainGraphVis <- function(pvalues, \n                     cutoff,\n                     templateImage,\n                     roiImage,\n                     roiNumbers,\n                     roiNames, \n                     lwd = 2, \n                     col = \"lightblue\"){\n    ##convert index to subscripts\n    imageDim <- dim(roiImage)\n\n    ##get the centers of the rois\n    roiCentroids <- sapply(roiNumbers, function(i){\n        imageSubscripts <- ind2sub(imageDim, (1 : prod(imageDim))[roiImage == i])\n        apply(imageSubscripts, 2, mean)\n    })\n    \n    contour3d( templateImage, level= 1, smooth = 20, fill = TRUE, mask = array(TRUE, dim(templateImage)), alpha = .2, add = FALSE)\n\n    ##apply the lines \n    idxs <- expand.grid(1 : roiCount, 1 : roiCount)\n    idxs <- idxs[idxs[,1] < idxs[,2],]\n    nonzero <- (1 : choose(roiCount, 2))[pvalues < cutoff]\n    for (i in 1 : length(nonzero)){\n        subscripts <- roiCentroids[, unlist(idxs[nonzero[i],])]\n        lines3d(subscripts[1,], subscripts[2,], subscripts[3,], lwd = lwd)\n    }\n    spheres3d(roiCentroids[1, ], roiCentroids[2, ], roiCentroids[3, ], radius = 2, color = col)\n}\n",
+    "created" : 1398882621422.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "403997877",
+    "id" : "5FD24317",
+    "lastKnownWriteTime" : 1398882732,
+    "path" : "~/GitHub/brisk/rsfmriGraph/R/templateBrainGraphVis.R",
+    "project_path" : "R/templateBrainGraphVis.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

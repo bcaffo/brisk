@@ -1,0 +1,16 @@
+{
+    "contents" : "#' @title Graph Vis 3D Sphere\n#' \n#' @description a function to display a graph on a set of 3D spheres\n#' \n#' @author Brian Caffo \n#' @param graph graph as a matrix or vector\n#' @param roiNames a character vector of the roi names\n#' @param expansion how far points are from the center\n#' @param bend how bendy the lines are\n#' @param lwd line width\n#' @param col color\n#' \ngraphVis3DSphere <- function(graph, \n                             roiNames, \n                             cutoff = NULL,\n                             expansion = 1.2, \n                             bend = .5, \n                             lwd = 2, \n                             col = \"black\"){\n    ##two data formats are accepted, either a matrix or the upper triangle of a matrix\n    if (is.matrix(graph)) graph <- cor2vec(graph)  \n    if (!is.null(cutoff)) graph <- (graph < cutoff) * 1\n\n    ##apply the cutoff if it hasn't be done already since this package\n    ##only displays binary graphs\n    if (!is.null(cutoff)) graph <- (graph == 1) * 1\n    \n    ##the number of rois\n    roiCount <- length(roiNames)\n    idxs <- expand.grid(1 : roiCount, 1 : roiCount)\n    idxs <- idxs[idxs[,1] < idxs[,2],]\n    nonzero <- (1 : choose(roiCount, 2))[graph == 1]\n    \n    ##from here http://blog.marmakoide.org/?p=1\n    theta <- (1 : roiCount) * pi * (3 - sqrt(5))\n    z = seq(from = 1 - 1.0 / roiCount, to = 1.0 / roiCount - 1, length = roiCount)\n    radius <- sqrt(1 - z^2)\n    x <- radius * cos(theta)\n    y <- radius * sin(theta)\n\n    ##initialize the rgl window\n    open3d()\n    \n    ##plot the labels\n    for (i in 1 : length(x)) {\n        text3d(x[i] * expansion, y[i] * expansion, z[i], text = roiNames[i], cex = .75, add = TRUE)\n    }\n\n    ##connect points with lines\n#     for (i in 1 : length(nonzero)){\n#         p <- unlist(idxs[nonzero[i],])\n#         lines3d(x[p], y[p], z[p],lwd = lwd)               \n#     }\n#     spheres3d(x, y, z, radius = .05, color = \"blue\", add = TRUE)\n\n    ##connect points with lines\n    for (i in 1 : length(nonzero)){\n        p <- unlist(idxs[nonzero[i],])\n        p0 <- c(x[p[1]], y[p[1]], z[p[[1]]])\n        p1 <- c(x[p[2]], y[p[2]], z[p[[2]]])\n        p2 <- bend * c(0, 0, 0) + (1 - bend) * (.5 * p0 + .5 * p1)\n        xvals <- c(p0[1], p1[1], p2[1])\n        yvals <- c(p0[2], p1[2], p2[2])\n        zvals <- c(p0[3], p1[3], p2[3])\n        tvals <- c(0, 1, .5)\n        t <- seq(0, 1, length = 100)\n        lines3d(predict(lm(xvals ~ tvals + I(tvals ^ 2)), newdata = data.frame(tvals = t)), \n                predict(lm(yvals ~ tvals + I(tvals ^ 2)), newdata = data.frame(tvals = t)),\n                predict(lm(zvals ~ tvals + I(tvals ^ 2)), newdata = data.frame(tvals = t)),\n                lwd = lwd)               \n    }\n    spheres3d(x = x, y = y, z = z, radius = .025, color = \"blue\", add = TRUE)\n}\n",
+    "created" : 1398882472322.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3618076595",
+    "id" : "9D717902",
+    "lastKnownWriteTime" : 1398882599,
+    "path" : "~/GitHub/brisk/rsfmriGraph/R/graphVisSphere3D.R",
+    "project_path" : "R/graphVisSphere3D.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

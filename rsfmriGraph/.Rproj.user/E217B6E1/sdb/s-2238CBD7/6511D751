@@ -1,0 +1,16 @@
+{
+    "contents" : "#' @title Multisubject graph vis\n#' @author Brian Caffo\n#' @description This function probably isn't terribly necessary\n\nmultiSubjectGraphVis <- function(graphList, roiNames, expansion = 1.2, bend = .5, lwd = 2, col = \"black\"){\n    roiCount <- length(roiNames)\n    \n    ##this is just a list of rows and column indices in a particular order\n    idxs <- expand.grid(1 : roiCount, 1 : roiCount)\n    idxs <- idxs[idxs[,1] < idxs[,2],]\n\n    ##create the graph of labels\n    ##angle values in radians\n    angles <- seq(0, 2 * pi, length = roiCount + 1)[-1]\n    x <- cos(angles)\n    y <- sin(angles)\n    noGraphs <- length(graphList)\n\n    z <- seq(-noGraphs/2, noGraphs/2, length = noGraphs)\n    \n    open3d()\n    for (i in 1 : noGraphs){\n        graph <- graphList[[i]]\n        graph <- graph[upper.tri(graph)]        \n        for (j in 1 : length(x)){\n            text3d(x[j] * expansion, y[j], z[i], text = roiNames[j], cex = .75, srt = angles[i] * 180 / pi, add = TRUE)\n        }\n        \n        ##find the elements of idxs that have corresponding non zero graph entries\n        nonzero <- (1 : choose(roiCount, 2))[graph == 1]\n        ##connect points with lines\n        for (j in 1 : length(nonzero)){\n            p <- unlist(idxs[nonzero[j],])            \n            lines3d(x[p], y[p], z[i])\n        }\n#        points3d(x = x, y = y, z = z[i], , color = \"blue\", add = TRUE)\n        spheres3d(x = x, y = y, z = z[i], radius = .025, color = \"blue\", add = TRUE)\n        \n    }\n}\n\n\n\n\n\n\n\n\n",
+    "created" : 1398880718450.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3767279525",
+    "id" : "6511D751",
+    "lastKnownWriteTime" : 1398881867,
+    "path" : "~/GitHub/brisk/rsfmriGraph/R/multiSubject.R",
+    "project_path" : "R/multiSubject.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

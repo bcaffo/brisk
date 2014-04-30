@@ -10,12 +10,7 @@ License: GPL-3
 Depends:
     AnalyzeFMRI,
     R.utils,
-    parallel
-Suggests:
-    fastICA,
-    fmri,
-    or.nifti,
-    rniftilib,
-    tractor.base,
-    RNiftyReg,
-    mritc
+    parallel,
+    rgl,
+    misc3d,
+    oro.nifti

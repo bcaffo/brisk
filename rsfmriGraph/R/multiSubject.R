@@ -1,3 +1,7 @@
+#' @title Multisubject graph vis
+#' @author Brian Caffo
+#' @description This function probably isn't terribly necessary
+
 multiSubjectGraphVis <- function(graphList, roiNames, expansion = 1.2, bend = .5, lwd = 2, col = "black"){
     roiCount <- length(roiNames)
     
