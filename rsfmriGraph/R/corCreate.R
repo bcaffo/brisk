@@ -3,9 +3,9 @@
 #' @description Reads a collection of csv files and puts them into a list of either 
 #' correlations or covariances
 #' 
-#' @details
+#' @details This function loops over a collection of csv files and then creates a 
+#' matrix of vectorized covariance or correlation functions or a list of them.
 #'
-#' 
 #' @author Brian Caffo
 #' @param filelist chararcter list of csv files
 #' @param loadFunction the function used to load in the files (defaults to read.csv)
@@ -16,11 +16,9 @@
 #' @param columnNames character vectror of names 
 #' @param cores parallelize the computation, only needed if \code{what} is something computationally intensive, otherwise it will slow things down
 #' @export
-#' @keywords
 #' @seealso cor2vec
 #' @return returns a matrix or list of output from what
-#' @aliases
-#' 
+#' @keywords cor
 
 corCreate <- function(fileList, path = "./", 
                       loadFunction = read.csv, 

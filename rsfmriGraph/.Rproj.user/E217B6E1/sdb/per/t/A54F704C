@@ -1,0 +1,16 @@
+{
+    "contents" : "#' @title utilty functions for rsfmriGraph \n#' @description A set of utility functions for the rsfmriGraph package\n#' @details This is a set of utiltiy functions for rsfmriGraph including\n#' functions to go back and forth between vectors and covariance matrices\n#' covariances to correlations and indices to subscripts.\n#' \n#' @author Brian Caffo\n#' @name rsfmriGraphUtilityFunctions\n#' @rdname rsfmriGraphUtilityFunctions\n#' \n#' @param sigma a covariance or square matrix \n#' @param a vector to be put back unto a square matrix\n#' @param n number of columns or rows of the square matrix\n#' @param dims dimensions\n#' @param indexVal index value to be converted to subscripts\n#' @keywords cor\n#' @aliases cov2cor, cor2vec, ind2sub\nNULL\n\n##a function that computes the correlation from a cov matrix\n#' @rdname rsfmriGraphUtilityFunctions \n#' @export\ncov2cor <- function(sigma) diag(1 / sqrt(diag(sigma))) %*% sigma %*% diag(1 / sqrt(diag(sigma)))\n\n##a function that vectorizes the covariance or correlation omitting the diagonal\ncor2vec <- function(sigma) sigma[upper.tri(sigma, diag = FALSE)]\n#' @rdname rsfmriGraphUtilityFunctions \n\n##a function that unvectorizes a correlation vector, note it assumes the diagonal is one and\n##that the vector input is the purely upper triangular part\nvec2cor <- function(vec, n){ rval <- diag(rep(1, n)); rval[upper.tri(rval)] <- vec; return(rval + t(rval) - diag(rep(1, n)))} \n#' @rdname rsfmriGraphUtilityFunctions \n##checking it\n##temp <- controls[[1]]\n##max(abs(temp - vec2cov(cov2vec(temp), roiCount)))\n\n\n##given index value returns array coordinates for a 3d array\nind2sub <- function(dims, indexVal){\n  I <- dims[1]\n  J <- dims[2]\n  K <- dims[3]\n  v <- indexVal\n\n  k <- (indexVal - 1) %/% (I * J) + 1\n  temp <- (indexVal - 1) %% (I * J) \n  j <- temp %/% I + 1\n  i <- temp %% I + 1\n  cbind(i, j, k)\n}\n#' @rdname rsfmriGraphUtilityFunctions \n#' @examples\n#' ##here's an example array with the indices valued\n#' arrayDim <- 2 : 4\n#' arrayIndices <- 1 : prod(arrayDim) \n#' ##show how they fill into the array\n#' array(arrayIndices, arrayDim)\n#' ##get the coordinates\n#' arrayCoordinates <- ind2sub(2 : 4, 1 : 24)\n#' ##show that they work\n#' array(arrayCoordinates[,1], arrayDim)\n#' array(arrayCoordinates[,2], arrayDim)\n#' array(arrayCoordinates[,3], arrayDim)\n#' @export\n\n",
+    "created" : 1398874343719.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4267854876",
+    "id" : "A54F704C",
+    "lastKnownWriteTime" : 1398877167,
+    "path" : "~/GitHub/brisk/rsfmriGraph/R/rsfmriGraphUtilityFunctions.R",
+    "project_path" : "R/rsfmriGraphUtilityFunctions.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
