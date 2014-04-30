@@ -1,0 +1,17 @@
+{
+    "contents" : "library(shiny)\n\n# Define UI for application that draws a histogram\nshinyUI(fluidPage(\n  \n  # Application title\n  titlePanel(\"Hello Shiny!\"),\n  \n  # Sidebar with a slider input for the number of bins\n  sidebarLayout(\n    sidebarPanel(\n      sliderInput(\"bins\",\n                  \"Number of bins:\",\n                  min = 1,\n                  max = 50,\n                  value = 30)\n    ),\n    \n    # Show a plot of the generated distribution\n    mainPanel(\n      plotOutput(\"distPlot\")\n    )\n  )\n))\n\n",
+    "created" : 1398889970323.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2029721938",
+    "id" : "F7321E53",
+    "lastKnownWriteTime" : 1398890045,
+    "path" : "~/GitHub/brisk/GROK/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
