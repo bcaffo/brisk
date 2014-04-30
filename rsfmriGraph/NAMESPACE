@@ -1,0 +1,2 @@
+export(corCreate)
+export(cov2cor)

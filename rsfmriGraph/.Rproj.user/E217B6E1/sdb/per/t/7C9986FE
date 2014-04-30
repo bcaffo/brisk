@@ -1,0 +1,16 @@
+{
+    "contents" : "Package: brisk\nType: Package\nTitle: rsfmriGraph\nVersion: 0.0.1\nDate: 2012-06-20\nAuthor: Brian Caffo\nMaintainer: Brian Caffo <bcaffo@gmail.com>\nDescription: A subpackage of BRISK for analyzing resting state fMRI graphs\nLicense: GPL-3\nDepends:\n    AnalyzeFMRI,\n    R.utils,\n    parallel\nSuggests:\n    fastICA,\n    fmri,\n    or.nifti,\n    rniftilib,\n    tractor.base,\n    RNiftyReg,\n    mritc\n",
+    "created" : 1398875044192.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4027543215",
+    "id" : "7C9986FE",
+    "lastKnownWriteTime" : 1398877025,
+    "path" : "~/R/rsfmriGraph/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "dcf"
+}
