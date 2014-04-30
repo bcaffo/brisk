@@ -3,6 +3,11 @@
 #' @details This is a set of utiltiy functions for rsfmriGraph including
 #' functions to go back and forth between vectors and covariance matrices
 #' covariances to correlations and indices to subscripts.
+#' \code{cov2cor} a function that computes the correlation from a cov matrix
+#' \code{cor2vec} a function that vectorizes the covariance or correlation omitting the diagonal
+#' \code{vec2cor} a function that unvectorizes a correlation vector, note it assumes the diagonal is one and
+#' that the vector input is the purely upper triangular part
+#' \code{ind2sub} given index value returns array coordinates for a 3d array
 #' 
 #' @author Brian Caffo
 #' @name rsfmriGraphUtilityFunctions
@@ -17,25 +22,15 @@
 #' @aliases cov2cor, cor2vec, ind2sub
 NULL
 
-##a function that computes the correlation from a cov matrix
-#' @rdname rsfmriGraphUtilityFunctions 
-#' @export
 cov2cor <- function(sigma) diag(1 / sqrt(diag(sigma))) %*% sigma %*% diag(1 / sqrt(diag(sigma)))
+#' @rdname rsfmriGraphUtilityFunctions 
 
-##a function that vectorizes the covariance or correlation omitting the diagonal
 cor2vec <- function(sigma) sigma[upper.tri(sigma, diag = FALSE)]
 #' @rdname rsfmriGraphUtilityFunctions 
 
-##a function that unvectorizes a correlation vector, note it assumes the diagonal is one and
-##that the vector input is the purely upper triangular part
 vec2cor <- function(vec, n){ rval <- diag(rep(1, n)); rval[upper.tri(rval)] <- vec; return(rval + t(rval) - diag(rep(1, n)))} 
 #' @rdname rsfmriGraphUtilityFunctions 
-##checking it
-##temp <- controls[[1]]
-##max(abs(temp - vec2cov(cov2vec(temp), roiCount)))
 
-
-##given index value returns array coordinates for a 3d array
 ind2sub <- function(dims, indexVal){
   I <- dims[1]
   J <- dims[2]
