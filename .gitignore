@@ -5,6 +5,5 @@ cigar/data/1.nii.gz
 cigar/data/264seeds_mask.nii.gz
 cigar/data/M1_clusters_3mm.nii
 cigar/fileList.csv
-old/rsfmriGraphOld/R/.Rhistory
-cigar/.Rhistory
-cigar/.Rhistory
+*.Rhistory
+.Rproj.user
