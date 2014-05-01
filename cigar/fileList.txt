@@ -1,0 +1,3 @@
+/Users/johnmuschelli/Dropbox/ShinyApps/cigar/data/0010001.1.1.nyu.nii.gz
+/Users/johnmuschelli/Dropbox/ShinyApps/cigar/data/0010002.1.1.nyu.nii.gz
+/Users/johnmuschelli/Dropbox/ShinyApps/cigar/data/0010003.1.1.nyu.nii.gz

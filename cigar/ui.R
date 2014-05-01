@@ -1,16 +1,25 @@
-library(shiny)
+types = c("mean", "median")
+bgvals = c(NA, 0, NaN)
+
 
 shinyUI(pageWithSidebar(
-  headerPanel("CIGAR - Computational Interactive Graphical Analysis of Regions"),
+  headerPanel("CIGAR" ),
   sidebarPanel(
-    h2("Inputs"),
-    fileInput('file_list', label = "CSV file with full paths to filenames"),
-    fileInput(inputId='roifile', label='nii or nii.gz ROI file')
+    fileInput("file_list", "CSV of 4D nii files", 
+              multiple = FALSE),
+    fileInput("roifile", "ROI nii file", 
+              multiple = TRUE),    
+    selectInput("type", "Summary for ROI:",
+                choices = types, selected=types[1]),
+    selectInput("bg.value", "Background Value for ROI:",
+                choices= bgvals, selected=bgvals[1]),
+    textInput("fname", "Name for output (will be date_stamped)",
+                value = ""),    
+    downloadButton("dlrda", "Download rda of ROI timeseries")   
   ),
   mainPanel(
-    h1("ROI Stamper Outer"),
-    h4("Status of image files"),
-    textOutput("toPrint"),
-    h4("Status of ROI file")
+#     plotOutput("outplot"),
+    textOutput("pbar"),
+    tableOutput("outtab")
   )
 ))
