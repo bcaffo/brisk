@@ -57,14 +57,14 @@ roiStamperOuter <- function(file_list, roifile,  type = "mean", bg.value = NA){
 
 # some code to test it out
 # 
-#fileList <- c(
-#  "/Users/Brian/Documents/GitHub/brisk/cigar/data/0010001.1.1.nyu.nii.gz",
-#  "/Users/Brian/Documents/GitHub/brisk/cigar/data/0010002.1.1.nyu.nii.gz",
-#  "/Users/Brian/Documents/GitHub/brisk/cigar/data/0010003.1.1.nyu.nii.gz"
-#)
-#roiFile <- file.choose()
+fileList <- c(
+  "/Users/Brian/Documents/GitHub/brisk/cigar/data/0010001.1.1.nyu.nii.gz",
+ "/Users/Brian/Documents/GitHub/brisk/cigar/data/0010002.1.1.nyu.nii.gz",
+  "/Users/Brian/Documents/GitHub/brisk/cigar/data/0010003.1.1.nyu.nii.gz"
+)
+roiFile <- "/Users/Brian/Documents/GitHub/brisk/cigar/data/M1_clusters_3mm.nii"
 
-#out <- roiStamperOuter(fileList, roiFile)
+out <- roiStamperOuter(fileList, roiFile)
 
 
 
