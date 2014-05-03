@@ -2,11 +2,13 @@
 \alias{corCreate}
 \title{corCreate loops over a collection of csv files and creates correlations}
 \usage{
-corCreate(fileList, path = "./", loadFunction = read.csv,
-  transpose = FALSE, what = cor, asMatrix = TRUE, columns = NULL,
-  columnNames = NULL, cores = 1, ...)
+corCreate(fileList = NULL, rsoOut = NULL, path = "./",
+  loadFunction = read.csv, transpose = FALSE, what = cor,
+  asMatrix = TRUE, columns = NULL, columnNames = NULL, cores = 1, ...)
 }
 \arguments{
+  \item{rsoOut}{output from roiStamper Outer}
+
   \item{filelist}{chararcter list of csv files}
 
   \item{loadFunction}{the function used to load in the

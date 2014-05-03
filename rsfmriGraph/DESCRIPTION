@@ -1,4 +1,4 @@
-Package: brisk
+Package: rsfmriGraph
 Type: Package
 Title: rsfmriGraph
 Version: 0.0.1
@@ -13,4 +13,7 @@ Depends:
     parallel,
     rgl,
     misc3d,
-    oro.nifti
+    oro.nifti,
+    glasso
+
+

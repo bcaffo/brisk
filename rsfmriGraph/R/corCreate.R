@@ -28,8 +28,7 @@ corCreate <- function(fileList = NULL, rsoOut = NULL, path = "./",
                       asMatrix = TRUE, 
                       columns = NULL, 
                       columnNames = NULL,
-                      cores = 1,
-                      
+                      cores = 1,                      
                       ...){
     if (is.null(fileList) & is.null(rsoOut)) stop("one of fileList or rsoOut must be non null")
     else if (!is.null(fileList) & !is.null(rsoOut)) stop("one of fileList or rsoOut must be null")
@@ -85,3 +84,5 @@ corCreate <- function(fileList = NULL, rsoOut = NULL, path = "./",
     
     return(out)
 }
+
+

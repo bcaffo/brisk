@@ -1,17 +1,18 @@
 library(shiny)
-library(brisk)
+library(rsfmriGraph)
 
 shinyUI(pageWithSidebar(
   headerPanel("CIGAR - Computational Interactive Graphical Analysis of Regions"),
   sidebarPanel(
     h2("Inputs"),
-    fileInput('file_list', label = "CSV file with full paths to filenames"),
-    fileInput(inputId='roifile', label='nii or nii.gz ROI file')
+    selectInput('what', label= "What function would you like to collect?", 
+                  choices = list("cor" = 1, "cov" = 2), selected = 1),
+    textInput('filename', label = "Filename for output", value = "output.rda"),
+    fileInput('rsOut', label = "Link to output from ROI Stamper GUI"),
+    downloadButton('downloadData', "Download Results")
   ),
   mainPanel(
-    h1("ROI Stamper Outer"),
-    h4("Status of image files"),
-    textOutput("toPrint"),
-    h4("Status of ROI file")
+    textOutput("blah"),
+    h1("Calculate cor/cov/icov for subjects and stack into a matrix")
   )
 ))
