@@ -22,7 +22,7 @@ corCreate(fileList = NULL, rsoOut = NULL, path = "./",
   \code{{link(cov)}}}
 
   \item{asMatrix}{each correlation run through cor2vec and
-  stacked up as a matrix? Otheriwse dump everything into a
+  stacked up as a matrix? Otherwise dump everything into a
   list}
 
   \item{columns}{use only specific columns of the csv
